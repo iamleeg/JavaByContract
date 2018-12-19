@@ -8,7 +8,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
-@Inherited
 @Repeatable(Invariants.class)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Invariant {
