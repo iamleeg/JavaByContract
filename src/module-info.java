@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author leeg
+ *
+ */
+module javaByContract {
+}
