@@ -3,9 +3,13 @@ package online.labrary.javaByContract;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import online.labrary.jbcTests.TriviallyBreakable;
+import online.labrary.jbcTests.TriviallyBreakableObject;
 
 public class ContractEnforcer implements InvocationHandler {
 	private Object target;
@@ -57,5 +61,12 @@ public class ContractEnforcer implements InvocationHandler {
 		}
 		return result;
 	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T enforce(Class<T> interfaceClass, T implementation) {
+		return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(),
+				new Class[] { interfaceClass },
+				new ContractEnforcer(implementation));
+		}
 
 }

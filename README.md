@@ -29,10 +29,7 @@ You can define invariants on classes or interfaces, but it probably only makes s
 
 Now, when you want to give someone an object that honours a contract, rather than returning that object directly you create a `Proxy` that enforces the contract.
 
-    Doer doesIt =
-	  (Doer) Proxy.newProxyInstance(Doer.class.getClassLoader(),
-	    new Class[] { Doer.class },
-		new ContractEnforcer(new Foo()));
+    Doer doesIt = ContractEnforcer.enforce(Doer.class, new Foo());
 
 They see nothing out of the ordinary, except that your contract is now enforced.
 
