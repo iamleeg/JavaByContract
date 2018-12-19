@@ -7,7 +7,7 @@ public class TriviallyBreakableObject implements TriviallyBreakable {
 		invariant = false;
 	}
 	
-	public boolean getInvariant() {
+	public final boolean getInvariant() {
 		return invariant;
 	}
 }

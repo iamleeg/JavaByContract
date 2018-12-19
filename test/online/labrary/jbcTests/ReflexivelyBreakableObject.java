@@ -9,7 +9,7 @@ public class ReflexivelyBreakableObject implements ReflexivelyBreakable {
 	}
 
 	@Override
-	public boolean getInvariant() {
+	public final boolean getInvariant() {
 		return invariant;
 	}
 

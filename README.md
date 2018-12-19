@@ -18,11 +18,11 @@ You can define invariants on classes or interfaces, but it probably only makes s
 		  // ...
 	    }
 		
-		public boolean getAPropertyThatMustBeTrue() {
+		public final boolean getAPropertyThatMustBeTrue() {
 		  return // invariant test
 	    }
 		
-		public boolean getAPropertyThatMustBeFalse() {
+		public final boolean getAPropertyThatMustBeFalse() {
 		  return // invariant test
 		}
 	}
@@ -35,6 +35,10 @@ Now, when you want to give someone an object that honours a contract, rather tha
 		new ContractEnforcer(new Foo()));
 
 They see nothing out of the ordinary, except that your contract is now enforced.
+
+The names of invariant properties are discovered from the annotations, and are treated as the names of methods with no arguments that return `boolean` (or `Boolean`). When a message is sent to the object that expresses the contract, the invariant methods are subsequently invoked to check that the invariant properties still hold.
+
+A useful design rule is to make the methods that test for contract enforcement `final`, so that a subclass cannot override them to violate the contract by e.g. always returning `true`.
 
 ## License
 
