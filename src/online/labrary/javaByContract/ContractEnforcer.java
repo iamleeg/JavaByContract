@@ -58,6 +58,7 @@ public class ContractEnforcer implements InvocationHandler {
 	
 	@SuppressWarnings("rawtypes")
 	private static Class[] getClassesForParameterList(Object[] args) {
+		if (args == null) return null;
 		Class[] results = new Class[args.length];
 		for (int i = 0; i < args.length; i++) {
 			results[i] = (args[i] != null) ? args[i].getClass() : Void.class;
@@ -65,16 +66,20 @@ public class ContractEnforcer implements InvocationHandler {
 		return results;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static Boolean findAndInvokeMethod(String name, Class targetClass, Object target, Object[] arguments) throws Throwable {
+		Method targetMethod = targetClass.getMethod(name, getClassesForParameterList(arguments));
+		return (Boolean)targetMethod.invoke(target, arguments);
+	}
+	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Object[] arguments = (args != null) ? args : new Object[0];
 		// check the preconditions
 		for (Precondition precondition : getPreconditionsForMethod(method)) {
 			String methodName = precondition.name();
 			boolean expectedValue = precondition.value();
-			Method targetMethod = targetClass.getMethod(methodName, getClassesForParameterList(arguments));
-			Boolean actualValue = (Boolean) targetMethod.invoke(target, arguments);
+			Boolean actualValue = findAndInvokeMethod(methodName, targetClass, target, arguments);
 			if (actualValue != expectedValue) {
 				throw new ContractViolationException(target, methodName, actualValue);
 			}
@@ -85,14 +90,12 @@ public class ContractEnforcer implements InvocationHandler {
 		for (Postcondition postcondition : getPostconditionsForMethod(method)) {
 			String methodName = postcondition.name();
 			boolean expectedValue = postcondition.value();
-			Class<?> returnType = method.getReturnType();
 			Object[] argsWithReturnValue = new Object[arguments.length + 1];
 			for (int i = 0; i < arguments.length; i++) {
 				argsWithReturnValue[i] = arguments[i];
 			}
 			argsWithReturnValue[arguments.length] = result; 
-			Method targetMethod = targetClass.getMethod(methodName, getClassesForParameterList(argsWithReturnValue));
-			Boolean actualValue = (Boolean) targetMethod.invoke(target, argsWithReturnValue);
+			Boolean actualValue = findAndInvokeMethod(methodName, targetClass, target, argsWithReturnValue);
 			if (actualValue != expectedValue) {
 				throw new ContractViolationException(target, methodName, actualValue);
 			}
@@ -101,8 +104,7 @@ public class ContractEnforcer implements InvocationHandler {
 		for (Invariant invariant : invariants) {
 			String methodName = invariant.name();
 			boolean expectedValue = invariant.value();
-			Method targetMethod = targetClass.getMethod(methodName, null);
-			Boolean actualValue = (Boolean) targetMethod.invoke(target, null);
+			Boolean actualValue = findAndInvokeMethod(methodName, targetClass, target, null);
 			if (actualValue != expectedValue) {
 				throw new ContractViolationException(target, methodName, actualValue);
 			}
