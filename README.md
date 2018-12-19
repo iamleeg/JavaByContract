@@ -46,7 +46,7 @@ The names of invariant properties are discovered from the annotations, and are t
 
 A method precondition takes the same arguments as the method being invoked, with the distinction that primitive types are promoted to their boxed types due to the way that the Java runtime resolves methods on reflection.
 
-Postconditions work the same as preconditions, except that they have an extra argument after the input parameters which contains the return value.
+Postconditions work the same as preconditions, except that they have an extra argument after the input parameters which contains the return value. If the method returns `void`, then the additional argument is of type `Void`.
 
 Notice that in addition to the parameters and return value, precondition and postcondition test methods have full access to their executing context (e.g. instance variables, if they're defined on a class).
 
