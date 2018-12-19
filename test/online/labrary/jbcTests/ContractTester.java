@@ -24,10 +24,17 @@ public class ContractTester {
 			System.out.println(String.format("Pass: %s", e.getMessage()));
 		}
 		
-		EvenToOdd e = ContractEnforcer.enforce(EvenToOdd.class, new OddNumberFinder());
+		EvenToOdd e = ContractEnforcer.enforce(EvenToOdd.class, new BrokenOddNumberFinder());
 		try {
 			e.nextOdd(1);
 			System.out.println("Failed: Survived breaking EvenToOdd#nextOdd precondition");
+		}
+		catch (ContractViolationException err) {
+			System.out.println(String.format("Pass: %s", err.getMessage()));
+		}
+		try {
+			e.nextOdd(2);
+			System.out.println("Failed: Survived breaking EvenToOdd#nextOdd postcondition");
 		}
 		catch (ContractViolationException err) {
 			System.out.println(String.format("Pass: %s", err.getMessage()));

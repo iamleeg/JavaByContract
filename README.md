@@ -10,10 +10,14 @@ You can define preconditions and postconditions on methods, and it makes sense t
 
     public interface Doer {
 	    @Precondition(name = "inputMustBeOdd")
+		@Postcondition(name = "outputMustBeEven")
 	    int doAThing(int input);
 		default boolean inputMustBeOdd(Integer input) {
-		  return (input % 2) == 1;
+		  return (input % 2) == 1; // precondition test
 	    }
+		default boolean outputMustBeEven(Integer input, Integer result) {
+		  return (result % 2) == 0; // postcondition test
+		}
     }
 	
     @Invariant(name = "getAPropertyThatMustBeTrue")
@@ -42,6 +46,10 @@ The names of invariant properties are discovered from the annotations, and are t
 
 A method precondition takes the same arguments as the method being invoked, with the distinction that primitive types are promoted to their boxed types due to the way that the Java runtime resolves methods on reflection.
 
+Postconditions work the same as preconditions, except that they have an extra argument after the input parameters which contains the return value.
+
+Notice that in addition to the parameters and return value, precondition and postcondition test methods have full access to their executing context (e.g. instance variables, if they're defined on a class).
+
 ## Useful Design Rules for Contracts
 
 1. Make the methods that test for contract enforcement `final`, so that a subclass cannot override them to violate the contract by e.g. always returning `true`.
@@ -49,6 +57,8 @@ A method precondition takes the same arguments as the method being invoked, with
 2. Define preconditions and postconditions as default methods on the interface that declares the contract where possible. This puts all of the information about how the contract is satisfied in one place. It makes it easier for an implementation to adopt the contract.
 
 3. Use [Command Query Separation](https://en.wikipedia.org/wiki/Command–query_separation) to design interfaces that have simpler contracts.
+
+4. Prefer contract conditions that are `true` for simplicity, but don't contort the contract to adhere to this rule.
 
 ## License
 

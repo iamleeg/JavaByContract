@@ -1,6 +1,6 @@
 package online.labrary.jbcTests;
 
-public class OddNumberFinder implements EvenToOdd {
+public class BrokenOddNumberFinder implements EvenToOdd {
 
 	@Override
 	public int nextOdd(int even) {
