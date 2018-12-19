@@ -52,13 +52,15 @@ Notice that in addition to the parameters and return value, precondition and pos
 
 ## Useful Design Rules for Contracts
 
-1. Make the methods that test for contract enforcement `final`, so that a subclass cannot override them to violate the contract by e.g. always returning `true`.
+1. Preconditions should get looser when subclasses override methods (they should be contravariant), and postconditions should get tighter (they should be covariant). Invariants should remain invariant. Define contract test methods as `final` where a subclass should only be able to augment the contract (by adding new annotations), and not loosen or subvert it.
 
 2. Define preconditions and postconditions as default methods on the interface that declares the contract where possible. This puts all of the information about how the contract is satisfied in one place. It makes it easier for an implementation to adopt the contract.
 
-3. Use [Command Query Separation](https://en.wikipedia.org/wiki/Command–query_separation) to design interfaces that have simpler contracts.
+3. But don't invoke rule 2 so hard that you miss out on saying something important, yet specific.
 
-4. Prefer contract conditions that are `true` for simplicity, but don't contort the contract to adhere to this rule.
+4. Use [Command Query Separation](https://en.wikipedia.org/wiki/Command–query_separation) to design interfaces that have simpler contracts.
+
+5. Prefer contract conditions that are `true` for simplicity, but don't contort the contract to adhere to this rule.
 
 ## License
 
