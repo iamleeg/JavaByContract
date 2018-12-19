@@ -1,6 +1,6 @@
 package online.labrary.jbcTests;
 
-public class ReflexivelyBreakableObject implements ReflexivelyBreakable {
+public class TransitivelyBreakableObject implements TransitivelyBreakable {
 	private boolean invariant = true;
 	
 	@Override

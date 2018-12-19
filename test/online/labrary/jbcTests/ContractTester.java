@@ -15,7 +15,7 @@ public class ContractTester {
 			System.out.println(String.format("Pass: %s", e.getMessage()));
 		}
 		
-		ReflexivelyBreakable r = ContractEnforcer.enforce(ReflexivelyBreakable.class, new ReflexivelyBreakableObject());
+		TransitivelyBreakable r = ContractEnforcer.enforce(TransitivelyBreakable.class, new TransitivelyBreakableObject());
 		try {
 			r.breakInvariant();
 			System.out.println("Failed: survived breaking ReflexivelyBreakable invariant");
