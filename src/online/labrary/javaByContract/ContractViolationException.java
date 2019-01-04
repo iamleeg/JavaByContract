@@ -1,5 +1,8 @@
 package online.labrary.javaByContract;
 
+/**
+ * A runtime error that signals that an object's contract was violated.
+ */
 public class ContractViolationException extends Error {
 
 	

@@ -9,6 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The class that enforces contracts expressed in @Invariant, @Precondition and @Postcondition annotations.
+ * Programmers should interact with this class via the static {@code enforce()} method, which wraps an object
+ * in a Proxy that will automatically enforce the contract on method invocation.
+ * @see Invariant
+ * @see Precondition
+ * @see Postcondition
+ */
 public class ContractEnforcer implements InvocationHandler {
 	private Object target;
 	@SuppressWarnings("rawtypes")
@@ -16,7 +24,7 @@ public class ContractEnforcer implements InvocationHandler {
 	private List<Invariant> invariants;
 	
 	@SuppressWarnings("rawtypes")
-	public ContractEnforcer(Object o) {
+	private ContractEnforcer(Object o) {
 		Class oClass = o.getClass();
 		List<Invariant> allInvariants = getInvariantsForClass(oClass);
 		target = o;
@@ -112,6 +120,14 @@ public class ContractEnforcer implements InvocationHandler {
 		return result;
 	}
 
+	/**
+	 * Given an object and the interface it is fulfilling, return a proxy that enforces
+	 * the object's contract for the methods on the stated interface.
+	 * @param interfaceClass The interface that callers will want to use on the implementing object.
+	 * @param implementation An object that implements the interface.
+	 * @param <T> The type of the interface callers will want to use on the implementing object.
+	 * @return A proxy that acts exactly like {@code implementation} and enforces its contract.
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T enforce(Class<T> interfaceClass, T implementation) {
 		return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(),
