@@ -89,7 +89,7 @@ public class ContractEnforcer implements InvocationHandler {
 			boolean expectedValue = precondition.value();
 			Boolean actualValue = findAndInvokeMethod(methodName, targetClass, target, arguments);
 			if (actualValue != expectedValue) {
-				throw new ContractViolationException(target, methodName, actualValue);
+				throw new ContractViolationException(target, Precondition.class.getName(), methodName, actualValue);
 			}
 		}
 		// run the method
@@ -105,7 +105,7 @@ public class ContractEnforcer implements InvocationHandler {
 			argsWithReturnValue[arguments.length] = result; 
 			Boolean actualValue = findAndInvokeMethod(methodName, targetClass, target, argsWithReturnValue);
 			if (actualValue != expectedValue) {
-				throw new ContractViolationException(target, methodName, actualValue);
+				throw new ContractViolationException(target, Postcondition.class.getName(), methodName, actualValue);
 			}
 		}
 		// check the invariants
@@ -114,7 +114,7 @@ public class ContractEnforcer implements InvocationHandler {
 			boolean expectedValue = invariant.value();
 			Boolean actualValue = findAndInvokeMethod(methodName, targetClass, target, null);
 			if (actualValue != expectedValue) {
-				throw new ContractViolationException(target, methodName, actualValue);
+				throw new ContractViolationException(target, Invariant.class.getName(), methodName, actualValue);
 			}
 		}
 		return result;
