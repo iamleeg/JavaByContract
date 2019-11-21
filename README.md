@@ -9,32 +9,33 @@ You can define invariants on classes or interfaces, but it probably only makes s
 You can define preconditions and postconditions on methods, and it makes sense to do that on the interface that defines the method. This makes the interface a true Abstract Data Type: it defines both the messages that can be sent to an object, and the expectations a caller can have when sending those messages.
 
     public interface Doer {
-	    @Precondition(name = "inputMustBeOdd")
-		@Postcondition(name = "outputMustBeEven")
-	    int doAThing(int input);
-		default boolean inputMustBeOdd(Integer input) {
-		  return (input % 2) == 1; // precondition test
-	    }
-		default boolean outputMustBeEven(Integer input, Integer result) {
-		  return (result % 2) == 0; // postcondition test
-		}
+      @Precondition(name = "inputMustBeOdd")
+      @Postcondition(name = "outputMustBeEven")
+      int doAThing(int input);
+      
+      default boolean inputMustBeOdd(Integer input) {
+        return (input % 2) == 1; // precondition test
+      }
+      default boolean outputMustBeEven(Integer input, Integer result) {
+        return (result % 2) == 0; // postcondition test
+      }
     }
 	
     @Invariant(name = "getAPropertyThatMustBeTrue")
-	@Invariant(name = "getAPropertyThatMustBeFalse", value = false)
-	public class Foo implements Doer {
-	    public int doAThing(int input) {
-		  // ...
-	    }
+    @Invariant(name = "getAPropertyThatMustBeFalse", value = false)
+    public class Foo implements Doer {
+      public int doAThing(int input) {
+        // ...
+      }
+
+      public final boolean getAPropertyThatMustBeTrue() {
+        return // invariant test
+      }
 		
-		public final boolean getAPropertyThatMustBeTrue() {
-		  return // invariant test
-	    }
-		
-		public final boolean getAPropertyThatMustBeFalse() {
-		  return // invariant test
-		}
-	}
+      public final boolean getAPropertyThatMustBeFalse() {
+        return // invariant test
+      }
+    }
 
 Now, when you want to give someone an object that honours a contract, rather than returning that object directly you create a `Proxy` that enforces the contract.
 
